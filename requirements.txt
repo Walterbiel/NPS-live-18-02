@@ -1,0 +1,8 @@
+pandas
+fastapi
+sqlalchemy
+seaborn
+matplotlib
+numpy
+faker
+uvicorn
