@@ -6,3 +6,5 @@ matplotlib
 numpy
 faker
 uvicorn
+sqlalchemy
+psycopg2
