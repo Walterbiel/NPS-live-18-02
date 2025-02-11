@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, Column, Integer, String, Date, Text, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import streamlit as st
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Configuração do PostgreSQL no Docker
 DB_USER = "admin"

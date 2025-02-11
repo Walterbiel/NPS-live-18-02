@@ -13,7 +13,7 @@ app = FastAPI()
 # Configuração do PostgreSQL no Docker
 DB_USER = "admin"
 DB_PASSWORD = "admin123"
-DB_HOST = "localhost"  # Se estiver rodando no Docker, use "localhost" ou o nome do serviço no docker-compose
+DB_HOST = "localhost" 
 DB_PORT = "5432"
 DB_NAME = "mydatabase"
 
@@ -35,13 +35,18 @@ class NPSFeedback(Base):
     genero = Column(String)
     cidade = Column(String)
     pais = Column(String)
-    categoria_nps = Column(String)
-    comentario_produto = Column(Text)
-    comentario_atendimento = Column(Text)
-    comentario_preco = Column(Text)
-    comentario_entrega = Column(Text)
-    comentario_geral = Column(Text)
+    mercado = Column(String)
     data_resposta = Column(Date)
+    Q_um = Column(Integer)
+    Q_dois = Column(Integer)
+    Q_tres = Column(Integer)
+    Q_quatro = Column(Integer)
+    Q_cinco = Column(Integer)
+    Q_seis = Column(Integer)
+    Q_sete = Column(Integer)
+    Q_oito = Column(Integer)
+    Q_nove = Column(Integer)
+    Q_dez = Column(Integer)
 
 # Criando a tabela no banco (caso ainda não exista)
 Base.metadata.create_all(bind=engine)
@@ -55,18 +60,21 @@ def generate_fake_data(num_rows=100):
     for _ in range(num_rows):
         data.append({
             "nome": fake.name(),
-            "email": fake.email(),
             "idade": np.random.randint(18, 70),
             "genero": np.random.choice(["Masculino", "Feminino"]),
-            "cidade": fake.city(),
             "pais": fake.country(),
-            "categoria_nps": np.random.choice(["Detrator", "Neutro", "Promotor"], p=[0.2, 0.4, 0.4]),
-            "comentario_produto": fake.sentence(),
-            "comentario_atendimento": fake.sentence(),
-            "comentario_preco": fake.sentence(),
-            "comentario_entrega": fake.sentence(),
-            "comentario_geral": fake.sentence(),
-            "data_resposta": fake.date_this_year()
+            "data_resposta": fake.date_this_year(),
+            "mercado" :np.random.choice(["Alimentos e Bebidas", "Tecnologia e Eletrônicos","Saúde e Bem-Estar","Moda e Vestuário","Automotivo","Educação e Treinamento","Construção e Imobiliário","Entretenimento e Mídia","Beleza e Cosméticos","Financeiro e Seguros"]),
+            "Q_um": np.random.randint(1,10),
+            "Q_dois": np.random.randint(1,10),
+            "Q_tres": np.random.randint(1,10),
+            "Q_quatro": np.random.randint(1,10),
+            "Q_cinco": np.random.randint(1,10),
+            "Q_seis": np.random.randint(1,10),
+            "Q_sete": np.random.randint(1,10),
+            "Q_oito": np.random.randint(1,10),
+            "Q_nove": np.random.randint(1,10),
+            "Q_dez": np.random.randint(1,10)
         })
     return data
 
