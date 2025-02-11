@@ -66,7 +66,7 @@ def generate_fake_data(num_rows=100):
             "comentario_preco": fake.sentence(),
             "comentario_entrega": fake.sentence(),
             "comentario_geral": fake.sentence(),
-            "data_resposta": date.today(),
+            "data_resposta": fake.date_this_year()
         })
     return data
 

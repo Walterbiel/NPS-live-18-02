@@ -2,7 +2,6 @@ import pandas as pd
 from sqlalchemy import create_engine, Column, Integer, String, Date, Text, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from fastapi import FastAPI
 
 # Configuração do PostgreSQL no Docker
 DB_USER = "admin"
@@ -18,37 +17,51 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-create_view_query = """
-CREATE OR REPLACE VIEW testdois AS
-SELECT * FROM nps_feedback;
-"""
+# Definição das views
+views_sql = [
+    # View para análise de NPS por categoria
+    """
+    CREATE OR REPLACE VIEW analise_nps_por_categoria AS
+    SELECT 
+        categoria_nps, 
+        COUNT(*) AS total_respostas,
+        ROUND(AVG(idade), 2) AS idade_media
+    FROM nps_feedback
+    GROUP BY categoria_nps;
+    """,
 
-create_view_query1 = """
-CREATE OR REPLACE VIEW testdois AS
-SELECT * FROM nps_feedback;
-"""
+    # View para análise de sentimentos nos comentários
+    """
+    CREATE OR REPLACE VIEW analise_sentimento_comentarios AS
+    SELECT 
+        cidade, 
+        pais, 
+        COUNT(comentario_produto) AS total_produto,
+        COUNT(comentario_atendimento) AS total_atendimento,
+        COUNT(comentario_preco) AS total_preco,
+        COUNT(comentario_entrega) AS total_entrega,
+        COUNT(comentario_geral) AS total_geral
+    FROM nps_feedback
+    GROUP BY cidade, pais;
+    """,
 
-create_view_query2 = """
-CREATE OR REPLACE VIEW testdois AS
-SELECT * FROM nps_feedback;
-"""
+    # View para análise temporal de NPS
+    """
+    CREATE OR REPLACE VIEW analise_nps_por_tempo AS
+    SELECT 
+        DATE_TRUNC('month', data_resposta) AS mes,
+        categoria_nps,
+        COUNT(*) AS total_respostas
+    FROM nps_feedback
+    GROUP BY mes, categoria_nps
+    ORDER BY mes;
+    """
+]
 
-create_view_query3 = """
-CREATE OR REPLACE VIEW testdois AS
-SELECT * FROM nps_feedback;
-"""
-
-create_view_query4= """
-CREATE OR REPLACE VIEW testdois AS
-SELECT * FROM nps_feedback;
-"""
-
-# Executar a query no banco
+# Criar as views no banco
 with engine.connect() as conn:
-    conn.execute(text(create_view_query))
-    conn.execute(text(create_view_query1))
-    conn.execute(text(create_view_query2))
-    conn.execute(text(create_view_query3))
-    conn.execute(text(create_view_query4))
-    conn.commit()  # Confirma a alteração
-    print("View criada/atualizada com sucesso!")
+    for view in views_sql:
+        conn.execute(text(view))
+    conn.commit()
+
+print("View criada/atualizada com sucesso!")

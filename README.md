@@ -16,7 +16,7 @@ $ uvicorn event_producer:app --reload --port 8080
 #### Chamar API: 
 
 Método: POST
-http://127.0.0.1:8000/gerar_dados/?num_rows=100
+http://127.0.0.1:8080/gerar_dados/?num_rows=100
 
 #### via cUrl:
 

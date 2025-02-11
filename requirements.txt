@@ -8,3 +8,4 @@ faker
 uvicorn
 sqlalchemy
 psycopg2
+streamlit
