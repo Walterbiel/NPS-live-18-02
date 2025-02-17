@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, Date, Text, text
+from sqlalchemy import create_engine, Column, Integer, String, Date, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -8,7 +8,7 @@ DB_USER = "admin"
 DB_PASSWORD = "admin123"
 DB_HOST = "localhost"  # Se estiver rodando no Docker, use "localhost" ou o nome do serviço no docker-compose
 DB_PORT = "5432"
-DB_NAME = "mydatabase"
+DB_NAME = "postgres"
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -17,51 +17,46 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Definição das views
-views_sql = [
-    # View para análise de NPS por categoria
-    """
-    CREATE OR REPLACE VIEW analise_nps_por_categoria AS
-    SELECT 
-        categoria_nps, 
-        COUNT(*) AS total_respostas,
-        ROUND(AVG(idade), 2) AS idade_media
-    FROM nps_feedback
-    GROUP BY categoria_nps;
-    """,
+# Definição da view
+views_sql = """
+CREATE OR REPLACE VIEW nps_feedback_view AS 
+SELECT 
+    id,
+    nome,
+    idade,
+    genero,
+    estado,
+    mercado,
+    data_resposta,
+    "Q_um",
+    "Q_dois",
+    "Q_tres",
+    "Q_quatro",
+    "Q_cinco",
+    "Q_seis",
+    "Q_sete",
+    "Q_oito",
+    "Q_nove",
+    ROUND(
+        ("Q_um" + "Q_dois" + "Q_tres" + "Q_quatro" + "Q_cinco" + "Q_seis" + "Q_sete" + "Q_oito" + "Q_nove") / 9.0
+    ) AS media_final,
+    CASE 
+        WHEN ROUND(
+            ("Q_um" + "Q_dois" + "Q_tres" + "Q_quatro" + "Q_cinco" + "Q_seis" + "Q_sete" + "Q_oito" + "Q_nove") / 9.0
+        ) BETWEEN 1 AND 6 THEN 'Detrator'
+        WHEN ROUND(
+            ("Q_um" + "Q_dois" + "Q_tres" + "Q_quatro" + "Q_cinco" + "Q_seis" + "Q_sete" + "Q_oito" + "Q_nove") / 9.0
+        ) BETWEEN 7 AND 8 THEN 'Neutro'
+        WHEN ROUND(
+            ("Q_um" + "Q_dois" + "Q_tres" + "Q_quatro" + "Q_cinco" + "Q_seis" + "Q_sete" + "Q_oito" + "Q_nove") / 9.0
+        ) BETWEEN 9 AND 10 THEN 'Promotor'
+    END AS classificacao_nps
+FROM nps_feedback;
+"""
 
-    # View para análise de sentimentos nos comentários
-    """
-    CREATE OR REPLACE VIEW analise_sentimento_comentarios AS
-    SELECT 
-        cidade, 
-        pais, 
-        COUNT(comentario_produto) AS total_produto,
-        COUNT(comentario_atendimento) AS total_atendimento,
-        COUNT(comentario_preco) AS total_preco,
-        COUNT(comentario_entrega) AS total_entrega,
-        COUNT(comentario_geral) AS total_geral
-    FROM nps_feedback
-    GROUP BY cidade, pais;
-    """,
-
-    # View para análise temporal de NPS
-    """
-    CREATE OR REPLACE VIEW analise_nps_por_tempo AS
-    SELECT 
-        DATE_TRUNC('month', data_resposta) AS mes,
-        categoria_nps,
-        COUNT(*) AS total_respostas
-    FROM nps_feedback
-    GROUP BY mes, categoria_nps
-    ORDER BY mes;
-    """
-]
-
-# Criar as views no banco
+# Criar a view no banco de dados
 with engine.connect() as conn:
-    for view in views_sql:
-        conn.execute(text(view))
-    conn.commit()
+    conn.execute(text(views_sql))  # Executa a criação da view
+    conn.commit()  # Confirma a alteração
 
-print("View criada/atualizada com sucesso!")
+print("View 'nps_feedback_view' criada/atualizada com sucesso!")

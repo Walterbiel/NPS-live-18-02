@@ -222,7 +222,7 @@ docker run --name postgres_nps -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin
 ### 3️⃣ Rodar a API  
 
 ```bash
-uvicorn event_producer:app --reload
+uvicorn event_producer:app --reload --port 8080
 ```
 
 ### 4️⃣ Testar o Endpoint  
@@ -265,5 +265,11 @@ SELECT * FROM nps_feedback;
 ```
 
 ---
+
+
+### Criar view no postgres, via Bash: 
+```bash
+python sql_views.py
+```
 
 

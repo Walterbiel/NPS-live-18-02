@@ -20,3 +20,10 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# Nome da view criada no PostgreSQL
+view_name = "nps_feedback_view"  # Substitua pelo nome correto da sua view
+
+# Criando uma sessão no banco
+with engine.connect() as conn:
+    df = pd.read_sql(f"SELECT * FROM {view_name}", conn)
+

@@ -15,7 +15,7 @@ DB_USER = "admin"
 DB_PASSWORD = "admin123"
 DB_HOST = "localhost" 
 DB_PORT = "5432"
-DB_NAME = "mydatabase"
+DB_NAME = "postgres"
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -30,11 +30,9 @@ class NPSFeedback(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String)
-    email = Column(String)
     idade = Column(Integer)
     genero = Column(String)
-    cidade = Column(String)
-    pais = Column(String)
+    estado = Column(String)
     mercado = Column(String)
     data_resposta = Column(Date)
     Q_um = Column(Integer)
@@ -46,13 +44,21 @@ class NPSFeedback(Base):
     Q_sete = Column(Integer)
     Q_oito = Column(Integer)
     Q_nove = Column(Integer)
-    Q_dez = Column(Integer)
 
 # Criando a tabela no banco (caso ainda não exista)
 Base.metadata.create_all(bind=engine)
 
 # Inicializando o Faker
 fake = Faker()
+
+estados_brasil = [
+    "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal",
+    "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul",
+    "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí",
+    "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia",
+    "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
+]
+
 
 # Função para gerar dados fictícios
 def generate_fake_data(num_rows=100):
@@ -62,7 +68,7 @@ def generate_fake_data(num_rows=100):
             "nome": fake.name(),
             "idade": np.random.randint(18, 70),
             "genero": np.random.choice(["Masculino", "Feminino"]),
-            "pais": fake.country(),
+            "estado":np.random.choice(estados_brasil) ,
             "data_resposta": fake.date_this_year(),
             "mercado" :np.random.choice(["Alimentos e Bebidas", "Tecnologia e Eletrônicos","Saúde e Bem-Estar","Moda e Vestuário","Automotivo","Educação e Treinamento","Construção e Imobiliário","Entretenimento e Mídia","Beleza e Cosméticos","Financeiro e Seguros"]),
             "Q_um": np.random.randint(1,10),
@@ -73,12 +79,12 @@ def generate_fake_data(num_rows=100):
             "Q_seis": np.random.randint(1,10),
             "Q_sete": np.random.randint(1,10),
             "Q_oito": np.random.randint(1,10),
-            "Q_nove": np.random.randint(1,10),
-            "Q_dez": np.random.randint(1,10)
+            "Q_nove": np.random.randint(1,10)
         })
     return data
 
 # Rota para gerar e armazenar os dados no PostgreSQL
+#Metódo POST
 @app.post("/gerar_dados/")
 def gerar_dados(num_rows: int = 100):
     fake_data = generate_fake_data(num_rows)
