@@ -272,4 +272,8 @@ SELECT * FROM nps_feedback;
 python sql_views.py
 ```
 
+### Para rodar o streamlit:
+```bash
+streamlit run app.py
+```
 

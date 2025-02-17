@@ -11,7 +11,7 @@ DB_USER = "admin"
 DB_PASSWORD = "admin123"
 DB_HOST = "localhost"  # Se estiver rodando no Docker, use "localhost" ou o nome do serviço no docker-compose
 DB_PORT = "5432"
-DB_NAME = "mydatabase"
+DB_NAME = "postgres"
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -27,3 +27,13 @@ view_name = "nps_feedback_view"  # Substitua pelo nome correto da sua view
 with engine.connect() as conn:
     df = pd.read_sql(f"SELECT * FROM {view_name}", conn)
 
+st.title("Análise NPS")
+
+# Exibir os dados como tabela no Streamlit
+st.dataframe(df)
+
+# Criar um gráfico de barras para visualizar a contagem de classificações NPS
+st.subheader("Distribuição de Classificação NPS")
+fig, ax = plt.subplots()
+sns.countplot(x="classificacao_nps", data=df, palette="viridis", ax=ax)
+st.pyplot(fig)
