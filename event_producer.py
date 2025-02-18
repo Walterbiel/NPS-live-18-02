@@ -52,36 +52,39 @@ Base.metadata.create_all(bind=engine)
 fake = Faker()
 
 estados_brasil = [
-    "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal",
-    "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul",
-    "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí",
-    "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia",
-    "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
+    "Acre", "Alagoas", "Amazonas", "Bahia", "Distrito Federal",
+    "Espírito Santo", "Goiás", "Mato Grosso do Sul", "Minas Gerais", "Paraná", "Pernambuco","Rio de Janeiro", "Rio Grande do Sul", 
+    "Roraima", "Santa Catarina", "São Paulo", "Sergipe"
 ]
 
 # Definir probabilidades para cada valor de 1 a 10
-probabilidades = [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.3, 0.2, 0.2]
+probabilidades = [0.02, 0.02, 0.02, 0.02, 0.02, 0.1, 0.05, 0.25, 0.3, 0.20]
 
 # Função para gerar dados fictícios
 def generate_fake_data(num_rows=100):
     data = []
     for _ in range(num_rows):
         data.append({
-            "nome": fake.name(),
-            "idade": np.random.randint(18, 70),
+              "nome": fake.name(),
+            "idade": int(np.random.randint(18, 70)),  # Conversão explícita
             "genero": np.random.choice(["Masculino", "Feminino"]),
             "estado": np.random.choice(estados_brasil),
             "data_resposta": fake.date_this_year(),
-            "mercado": np.random.choice(["Alimentos e Bebidas", "Tecnologia e Eletrônicos", "Saúde e Bem-Estar", "Moda e Vestuário", "Automotivo", "Educação e Treinamento", "Construção e Imobiliário", "Entretenimento e Mídia", "Beleza e Cosméticos", "Financeiro e Seguros"]),
-            "Q_um": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_dois": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_tres": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_quatro": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_cinco": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_seis": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_sete": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_oito": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
-            "Q_nove": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades)
+            "mercado": np.random.choice([
+                "Alimentos e Bebidas", "Tecnologia e Eletrônicos", "Saúde e Bem-Estar",
+                "Moda e Vestuário", "Automotivo", "Educação e Treinamento",
+                "Construção e Imobiliário", "Entretenimento e Mídia",
+                "Beleza e Cosméticos", "Financeiro e Seguros"
+            ]),
+            "Q_um": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_dois": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_tres": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_quatro": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_cinco": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_seis": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_sete": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_oito": int(np.random.choice(range(1, 11), p=probabilidades)),
+            "Q_nove": int(np.random.choice(range(1, 11), p=probabilidades))
         })
     return data
 
