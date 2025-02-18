@@ -59,6 +59,8 @@ estados_brasil = [
     "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
 ]
 
+# Definir probabilidades para cada valor de 1 a 10
+probabilidades = [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.3, 0.2, 0.2]
 
 # Função para gerar dados fictícios
 def generate_fake_data(num_rows=100):
@@ -68,18 +70,18 @@ def generate_fake_data(num_rows=100):
             "nome": fake.name(),
             "idade": np.random.randint(18, 70),
             "genero": np.random.choice(["Masculino", "Feminino"]),
-            "estado":np.random.choice(estados_brasil) ,
+            "estado": np.random.choice(estados_brasil),
             "data_resposta": fake.date_this_year(),
-            "mercado" :np.random.choice(["Alimentos e Bebidas", "Tecnologia e Eletrônicos","Saúde e Bem-Estar","Moda e Vestuário","Automotivo","Educação e Treinamento","Construção e Imobiliário","Entretenimento e Mídia","Beleza e Cosméticos","Financeiro e Seguros"]),
-            "Q_um": np.random.randint(1,10),
-            "Q_dois": np.random.randint(1,10),
-            "Q_tres": np.random.randint(1,10),
-            "Q_quatro": np.random.randint(1,10),
-            "Q_cinco": np.random.randint(1,10),
-            "Q_seis": np.random.randint(1,10),
-            "Q_sete": np.random.randint(1,10),
-            "Q_oito": np.random.randint(1,10),
-            "Q_nove": np.random.randint(1,10)
+            "mercado": np.random.choice(["Alimentos e Bebidas", "Tecnologia e Eletrônicos", "Saúde e Bem-Estar", "Moda e Vestuário", "Automotivo", "Educação e Treinamento", "Construção e Imobiliário", "Entretenimento e Mídia", "Beleza e Cosméticos", "Financeiro e Seguros"]),
+            "Q_um": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_dois": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_tres": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_quatro": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_cinco": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_seis": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_sete": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_oito": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades),
+            "Q_nove": np.random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], p=probabilidades)
         })
     return data
 
